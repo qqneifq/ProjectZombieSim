@@ -15,7 +15,6 @@ public class PlayerBuilder : MonoBehaviour
     [SerializeField] private float _rotationSpeed;
 
     private Floor _floorController;
-    private OrdersController _storageController; 
     private GameObject buildingGO = null;
 
     private Building _building;
@@ -53,7 +52,6 @@ public class PlayerBuilder : MonoBehaviour
     {
         _wheel = 0;
         _floorController = FindObjectOfType<Floor>();
-        _storageController = FindObjectOfType<OrdersController>();
     }
     void Update()
     {
@@ -164,10 +162,7 @@ public class PlayerBuilder : MonoBehaviour
             _floorController.ReleaseBuildingPoints(buildingContollerDelete.getUsedPoints());
             buildingContollerDelete.SetUsedPoints(null);
 
-            if (_building._gameBody.tag.Equals("Storage"))
-            {
-                _storageController.DeleteStorage(hit.transform.GetComponent<BoxStorage>());
-            }
+
             Destroy(hit.transform.gameObject);
         }
         else if (_building == null && Input.GetKeyDown(KeyCode.B) && !_isBuilding && Physics.Raycast(_face.position, fwd, out hit, _raycastField, _groundMask)) {
@@ -186,20 +181,6 @@ public class PlayerBuilder : MonoBehaviour
             buildingGO.GetComponentInChildren<BoxCollider>().isTrigger = false;
             _floorController.TryToBuild(buildingContoller);
             _floorController.DestroyBuildingMap();
-
-            if(_building._gameBody.tag.Equals("Storage"))
-            {
-                buildingGO.GetComponent<BoxStorage>().Init();
-                _storageController.AddStorage(buildingGO.GetComponent<BoxStorage>());
-            } else
-            {
-                List<ItemHolder> itemHolders = buildingGO.GetComponent<BuildingContoller>().GetItemHolders();
-
-                foreach(ItemHolder itemHolder in itemHolders)
-                {
-                    itemHolder.Init();
-                }
-            }
 
             _building = null;
             _isBuilding = false;

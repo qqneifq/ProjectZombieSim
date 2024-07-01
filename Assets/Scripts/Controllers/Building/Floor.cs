@@ -15,7 +15,6 @@ public class Floor : MonoBehaviour
     private FloorController _buildingMatrixController;
     private PathFindingController _pathFindingController;
     private DebugBuildingLayout _debugBuildingLayout;
-    private HashSetNListStructure<ItemHolder> _itemHolders;
     private List<List<(int, int)>> _endPoints;
     private List<(int, int)> _exitPoints;
     //OZ axis (local)
@@ -28,7 +27,6 @@ public class Floor : MonoBehaviour
     void Start()
     {
         _endPoints = new List<List<(int, int)>>();
-        _itemHolders = new HashSetNListStructure<ItemHolder>();
 
         _correctForwardVector = _pointStart.forward * _matrixDivisionUnit;
         _correctRightVector = _pointStart.right * _matrixDivisionUnit;
@@ -45,15 +43,7 @@ public class Floor : MonoBehaviour
         };
     }
 
-    //PathFinding methods
-    public (List<Vector3>, ItemHolder) GetWayToRandom(Vector3 startPoint)
-    {
-        ItemHolder itemHolder = _itemHolders.GetRandom();
-        if (_itemHolders.Size() > 0)
-            return (_pathFindingController.GetWay(_buildingMatrixController.getBuildingMatrix(), _buildingMatrixController.fromGlobalToMatrix(startPoint), itemHolder.getPoints()), itemHolder);
 
-        return (null, null);
-    }
 
     public List<Vector3> GetWayToRandomEndPoint(Vector3 startPoint)
     {
@@ -90,13 +80,7 @@ public class Floor : MonoBehaviour
             {
                 _endPoints.Add(ans);
             } 
-            else {
-                foreach (ItemHolder itemHolder in buildingContoller.GetItemHolders())
-                {
-                    itemHolder.setPoints(ans);
-                    _itemHolders.Add(itemHolder);
-                }
-            }
+        
         }
 
         return ans;
