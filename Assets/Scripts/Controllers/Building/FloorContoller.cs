@@ -8,7 +8,6 @@ public class FloorController
 
     private Vector3 _pointStart;
 
-
     private bool[,] _buildingMatrix;
 
     private float[,] _transformationMatrix;

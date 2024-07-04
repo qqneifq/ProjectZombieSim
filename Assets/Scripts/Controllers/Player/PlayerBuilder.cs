@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static BuildingsConsts;
-using static ItemsConsts;
 
 public class PlayerBuilder : MonoBehaviour
 {
@@ -15,7 +14,7 @@ public class PlayerBuilder : MonoBehaviour
     [SerializeField] private float _rotationSpeed;
 
     private Floor _floorController;
-    private GameObject buildingGO = null;
+    private GameObject _buildingGO = null;
 
     private Building _building;
     private bool _isBuilding;
@@ -58,100 +57,29 @@ public class PlayerBuilder : MonoBehaviour
         RaycastHit hit;
         Vector3 fwd = _face.forward;
 
-
         Debug.DrawRay(_face.position + fwd * 1, fwd, Color.blue);
         //Move
-        if(_isBuilding && Physics.Raycast(_face.position, fwd, out hit, _raycastField, _groundMask))
+        if(_buildingGO != null && Physics.Raycast(_face.position, fwd, out hit, _raycastField, _groundMask))
         {
-            buildingGO.transform.position = new Vector3(hit.point.x, hit.point.y + _building._size.y/2, hit.point.z);
-        }
-
-        //Change
-        _wheel = _wheel + Input.GetAxis("Mouse ScrollWheel");
-        if (_wheel * _wheel > 0.001f)
-        {
-            Debug.Log("NOT ZERO: " + _wheel);
-        }
-        
-        if (_isBuilding && _wheel < -1f)
-        {
-            _wheel = 0;
-            Debug.Log("RIGHT BRACKET");
-
-            Destroy(buildingGO);
-
-            if((int)_buildingIndificator + 1 >= Enum.GetValues(typeof(BuildingIndificator)).Length)
-            {
-                _buildingIndificator = 0;
-            } else
-            {
-                _buildingIndificator += 1;
-            }
-
-            _building = _buildingsFactory.Get(_buildingIndificator);
-
-            while(_building == null)
-            {
-                if ((int)_buildingIndificator + 1 >= Enum.GetValues(typeof(BuildingIndificator)).Length)
-                {
-                    _buildingIndificator = 0;
-                }
-                else
-                {
-                    _buildingIndificator += 1;
-                }
-                _building = _buildingsFactory.Get(_buildingIndificator);
-            }
-            onBuildingIdChange?.Invoke(_building.getName());
-
-            buildingGO = Instantiate(_building._gameBody);
-        } else if (_isBuilding && _wheel > 1f)
-        {
-            _wheel = 0;
-            Debug.Log("LEFT BRACKET");
-
-            Destroy(buildingGO);
-
-            if ((int)_buildingIndificator - 1 < 0) 
-            {
-                _buildingIndificator = (BuildingIndificator)(Enum.GetValues(typeof(BuildingIndificator)).Length - 1);
-            }
-            else
-            {
-                _buildingIndificator --;
-            }
-
-            _building = _buildingsFactory.Get(_buildingIndificator);
-
-            while (_building == null)
-            {
-                if ((int)_buildingIndificator - 1 < 0)
-                {
-                    _buildingIndificator = (BuildingIndificator)(Enum.GetValues(typeof(BuildingIndificator)).Length - 1);
-                }
-                else
-                {
-                    _buildingIndificator--;
-                }
-
-                _building = _buildingsFactory.Get(_buildingIndificator);
-            }
-            onBuildingIdChange?.Invoke(_building.getName());
-
-            buildingGO = Instantiate(_building._gameBody);
+            _buildingGO.transform.position = new Vector3(hit.point.x - hit.point.x % _floorController.getDelta(), hit.point.y + _building._size.y/2, hit.point.z - hit.point.z % _floorController.getDelta());
         }
 
         //rotating
-        if (_isBuilding)
+        if (_buildingGO != null )
         {
-           
-            buildingGO.transform.Rotate(buildingGO.transform.up, _rotationSpeed * Time.deltaTime * Input.GetAxis("BuildingsRotate"));
+           if (Input.GetKeyDown(KeyCode.R))
+           {
+                _buildingGO.transform.Rotate(Vector3.up, 45);
+           } else if (Input.GetKeyDown(KeyCode.T))
+           {
+                _buildingGO.transform.Rotate(Vector3.up, -45);
 
+           }
         }
         BuildingContoller buildingContoller = null;
-        if (_building != null && _isBuilding)
+        if (_building != null)
         {
-            buildingContoller = buildingGO.GetComponent<BuildingContoller>();
+            buildingContoller = _buildingGO.GetComponent<BuildingContoller>();
             buildingContoller.SetData(_building);
         }
 
@@ -166,32 +94,34 @@ public class PlayerBuilder : MonoBehaviour
             Destroy(hit.transform.gameObject);
         }
         else if (_building == null && Input.GetKeyDown(KeyCode.B) && !_isBuilding && Physics.Raycast(_face.position, fwd, out hit, _raycastField, _groundMask)) {
-            _floorController.CreateBuildingMap();
-            _building = _buildingsFactory.Get(BuildingIndificator.Desk1);
-            onBuildingIdChange?.Invoke(_building.getName());
-            buildingGO = Instantiate(_building._gameBody, transform.position, transform.rotation);
+             _floorController.CreateBuildingMap();
+            _building = _buildingsFactory.Get(0);
+            //onBuildingIdChange?.Invoke(_building.getName());
+            _buildingGO = Instantiate(_building._gameBody, transform.position, transform.rotation);
+            _buildingGO.GetComponentInChildren<BoxCollider>().isTrigger = true;
 
-            _buildingIndificator = BuildingIndificator.Desk1;
+            _buildingIndificator = 0;
             _isBuilding = true;
 
-            onBuildingRequest?.Invoke(true);
+            //onBuildingRequest?.Invoke(true);
         }
-        else if (_isBuilding && Input.GetKeyDown(KeyCode.Q)
+        else if (_buildingGO != null && Input.GetKeyDown(KeyCode.Q)
             && _floorController.IsItPossibleToBuild(buildingContoller)){
-            buildingGO.GetComponentInChildren<BoxCollider>().isTrigger = false;
+            _buildingGO.GetComponentInChildren<BoxCollider>().isTrigger = false;
             _floorController.TryToBuild(buildingContoller);
             _floorController.DestroyBuildingMap();
 
             _building = null;
+            _buildingGO = null;
             _isBuilding = false;
-            onBuildingRequest?.Invoke(false);
+            //onBuildingRequest?.Invoke(false);
 
         }
-        else if (_isBuilding && Input.GetKeyDown(KeyCode.Escape)) {
+        else if (_buildingGO != null && Input.GetKeyDown(KeyCode.Escape)) {
             _floorController.DestroyBuildingMap();
 
             _isBuilding = false;
-            Destroy(buildingGO);
+            Destroy(_buildingGO);
 
             _building = null;
         }

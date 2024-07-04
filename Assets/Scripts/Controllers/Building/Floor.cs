@@ -7,7 +7,6 @@ public class Floor : MonoBehaviour
     [SerializeField] private GameObject _redDebugPlane;
 
     [SerializeField] private Transform _pointStart;
-    [SerializeField] private GameObject _exitObject;
     [SerializeField] private Vector3 _size;
 
     [SerializeField] private float _matrixDivisionUnit = 0.5f;
@@ -16,7 +15,6 @@ public class Floor : MonoBehaviour
     private PathFindingController _pathFindingController;
     private DebugBuildingLayout _debugBuildingLayout;
     private List<List<(int, int)>> _endPoints;
-    private List<(int, int)> _exitPoints;
     //OZ axis (local)
     private Vector3 _correctForwardVector;
     //OX axis (local)
@@ -35,28 +33,18 @@ public class Floor : MonoBehaviour
 
         _buildingMatrixController = new FloorController(_realMatrixSize, _pointStart, _correctForwardVector, _correctRightVector, _matrixDivisionUnit);
         _pathFindingController = new PathFindingController(_realMatrixSize, _correctForwardVector, _correctRightVector, _pointStart.position);
-        _debugBuildingLayout = new DebugBuildingLayout(_greenDebugPlane, _redDebugPlane, _pointStart, _realMatrixSize, _correctForwardVector, _correctRightVector);
-
-        _exitPoints = new List<(int, int)>
-        {
-            _buildingMatrixController.findClosestPointInPeremeter(_exitObject.transform.position)
-        };
+        _debugBuildingLayout = new DebugBuildingLayout(_greenDebugPlane, _redDebugPlane, FindAnyObjectByType<PlayerMovement>().transform, _pointStart, _realMatrixSize, _matrixDivisionUnit, _correctForwardVector, _correctRightVector);
     }
 
-
+    public void Update()
+    {
+        _debugBuildingLayout.update();
+    }
 
     public List<Vector3> GetWayToRandomEndPoint(Vector3 startPoint)
     {
         if (_endPoints.Count > 0)
             return _pathFindingController.GetWay(_buildingMatrixController.getBuildingMatrix(), _buildingMatrixController.fromGlobalToMatrix(startPoint), _endPoints[Random.Range(0, _endPoints.Count)]);
-
-        return null;
-    }
-
-    public List<Vector3> GetWayToExitPoint(Vector3 startPoint)
-    {
-        if (_endPoints.Count > 0)
-            return _pathFindingController.GetWay(_buildingMatrixController.getBuildingMatrix(), _buildingMatrixController.fromGlobalToMatrix(startPoint), _exitPoints);
 
         return null;
     }
@@ -74,18 +62,10 @@ public class Floor : MonoBehaviour
     {
         List<(int, int)> ans = _buildingMatrixController.TryToBuild(buildingContoller);
         buildingContoller.SetUsedPoints(ans);
-        if (ans != null && ans.Count >= 1)
-        {
-            if(buildingContoller.GetIndificator().Equals(BuildingsConsts.BuildingIndificator.EndPoint))
-            {
-                _endPoints.Add(ans);
-            } 
-        
-        }
 
         return ans;
     }
-
+    
     public List<(int, int)> TryToBuild((Vector3, Quaternion)  buildingContoller, Vector3 size)
     {
         List<(int, int)> ans = _buildingMatrixController.TryToBuild(buildingContoller, size);
@@ -108,5 +88,9 @@ public class Floor : MonoBehaviour
     public void DestroyBuildingMap()
     {
         _debugBuildingLayout.DestroyBuildingMap();
+    }
+    public float getDelta()
+    {
+        return _matrixDivisionUnit;
     }
 }

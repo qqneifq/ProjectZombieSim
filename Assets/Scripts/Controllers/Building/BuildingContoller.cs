@@ -3,11 +3,8 @@ using UnityEngine;
 
 public class BuildingContoller : MonoBehaviour
 {
-    [SerializeField] private List<ItemHolder> _shelfs;
-
     private List<(int, int)> _usedPoints;
     private Building _data;
-    
 
     public Vector3 GetSize()
     {
@@ -24,11 +21,6 @@ public class BuildingContoller : MonoBehaviour
     public Transform GetTransform()
     {
         return transform;
-    }
-
-    public List<ItemHolder> GetItemHolders()
-    {
-        return _shelfs;
     }
 
     public void SetUsedPoints(List<(int, int)> usedPoints) { 
