@@ -14,8 +14,10 @@ public class ListBuildingInspector : Editor
     private SerializedProperty _list;
     private int _listSize;
 
+
     void OnEnable()
     {
+       
         _classHolder = (BuildingsFactory)target;
         _targetObject = new SerializedObject(_classHolder);
         _list = _targetObject.FindProperty("buildings"); // Find the List in our script and create a refrence of it
@@ -73,7 +75,7 @@ public class ListBuildingInspector : Editor
             SerializedProperty MyGameObject = MyListRef.FindPropertyRelative("_gameBody");
             SerializedProperty MyName = MyListRef.FindPropertyRelative("_name");
             SerializedProperty MySize = MyListRef.FindPropertyRelative("_size");
-
+            SerializedProperty MyConditions = MyListRef.FindPropertyRelative("_buildingConditions");
 
             // Display the property fields in two ways.
 
@@ -82,8 +84,17 @@ public class ListBuildingInspector : Editor
             EditorGUILayout.PropertyField(MyGameObject);
             EditorGUILayout.PropertyField(MyName);
             EditorGUILayout.PropertyField(MySize);
+            
+            for (int j = 0; j < ResourceTypes.Count(); j++)
+            {
+                if(MyConditions.arraySize < j)
+                {
+                    MyConditions.InsertArrayElementAtIndex(0);
+                }
+                SerializedProperty MyListResourcesRef = MyConditions.GetArrayElementAtIndex(j);
 
-
+                EditorGUILayout.PropertyField(MyListResourcesRef, new GUIContent(ResourceTypes.Name(j)));
+            }
             // Array fields with remove at index
             EditorGUILayout.Space();
             EditorGUILayout.Space();

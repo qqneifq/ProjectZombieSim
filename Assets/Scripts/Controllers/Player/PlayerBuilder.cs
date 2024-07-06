@@ -69,10 +69,10 @@ public class PlayerBuilder : MonoBehaviour
         {
            if (Input.GetKeyDown(KeyCode.R))
            {
-                _buildingGO.transform.Rotate(Vector3.up, 45);
+                _buildingGO.transform.Rotate(Vector3.up, 90);
            } else if (Input.GetKeyDown(KeyCode.T))
            {
-                _buildingGO.transform.Rotate(Vector3.up, -45);
+                _buildingGO.transform.Rotate(Vector3.up, -90);
 
            }
         }
@@ -97,7 +97,7 @@ public class PlayerBuilder : MonoBehaviour
              _floorController.CreateBuildingMap();
             _building = _buildingsFactory.Get(0);
             //onBuildingIdChange?.Invoke(_building.getName());
-            _buildingGO = Instantiate(_building._gameBody, transform.position, transform.rotation);
+            _buildingGO = Instantiate(_building._gameBody);
             _buildingGO.GetComponentInChildren<BoxCollider>().isTrigger = true;
 
             _buildingIndificator = 0;

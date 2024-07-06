@@ -27,7 +27,7 @@ public class BuildingsFactory : MonoBehaviour
                 buildings[index]._gameBody.AddComponent<BuildingContoller>();
                 bc = buildings[index]._gameBody.GetComponent<BuildingContoller>();
 
-                bc.SetData(new Building(buildingIndificator, buildings[index]._gameBody, buildings[index]._name));
+                bc.SetData(new Building(buildingIndificator, new List<int>(), buildings[index]._gameBody, buildings[index]._name));
             }
             return buildings[index];
         }
