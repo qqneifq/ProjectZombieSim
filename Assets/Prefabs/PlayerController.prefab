@@ -179,9 +179,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3840811486754581995}
   - component: {fileID: 1965885538160705668}
+  - component: {fileID: 3247772083581082983}
   - component: {fileID: 7807688758252163994}
   - component: {fileID: 5921999377585516655}
-  - component: {fileID: 2557057625861533844}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: Untagged
@@ -233,6 +233,23 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3247772083581082983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6727081805723385082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45a7e46390ebd2544995731b9413f737, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _face: {fileID: 3748732513421801641}
+  _groundMask:
+    serializedVersion: 2
+    m_Bits: 8
+  _raycastField: 5
 --- !u!114 &7807688758252163994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,25 +287,6 @@ MonoBehaviour:
   _gravity: -9.81
   _groundDistance: 0.4
   _jumpHeight: 1.06
---- !u!114 &2557057625861533844
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6727081805723385082}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98442e66eac72044584dfb4a7834171f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _face: {fileID: 3748732513421801641}
-  _groundMask:
-    serializedVersion: 2
-    m_Bits: 8
-  _buildingsFactory: {fileID: 4703934682668679636, guid: b311c26162159fa498c2a4605d7f8f0e, type: 3}
-  _raycastField: 5
-  _rotationSpeed: 120
 --- !u!1 &7078208442526265975
 GameObject:
   m_ObjectHideFlags: 0

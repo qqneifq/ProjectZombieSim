@@ -5,7 +5,6 @@ public class BuildingsFactory : MonoBehaviour
 {
     [SerializeField] private List<Building> buildings;
 
-
     public void Add(Building building)
     {
         buildings.Add(building);

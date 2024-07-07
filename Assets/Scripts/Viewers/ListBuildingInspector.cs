@@ -87,7 +87,7 @@ public class ListBuildingInspector : Editor
             
             for (int j = 0; j < ResourceTypes.Count(); j++)
             {
-                if(MyConditions.arraySize < j)
+                if(MyConditions.arraySize <= j)
                 {
                     MyConditions.InsertArrayElementAtIndex(0);
                 }

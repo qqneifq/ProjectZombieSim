@@ -1,13 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class ResourceTypes
 {
     public enum ResourcesEnum
     {
-        Stone, Wood, People, Food
+        Stone, Wood, People, Food, Energy
     }
 
     public static int Count()
