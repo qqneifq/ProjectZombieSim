@@ -49,7 +49,7 @@ public class PlayerBuilder : MonoBehaviour
         
 
         //Open\Close\Create\Destroy
-        if (Input.GetKeyDown(KeyCode.Z) && Physics.Raycast(_face.position, fwd, out hit, _raycastField) && (hit.transform.CompareTag("Building") || hit.transform.CompareTag("Storage"))) {
+        /*if (Input.GetKeyDown(KeyCode.Z) && Physics.Raycast(_face.position, fwd, out hit, _raycastField) && (hit.transform.CompareTag("Building") || hit.transform.CompareTag("Storage"))) {
 
             BuildingContoller buildingContollerDelete = hit.transform.GetComponent<BuildingContoller>();
             _floorController.ReleaseBuildingPoints(buildingContollerDelete.getUsedPoints());
@@ -81,7 +81,7 @@ public class PlayerBuilder : MonoBehaviour
             Destroy(_buildingGO);
 
             _building = null;
-        }
+        }*/
     }
 
     public void ChangeGameObject(GameObject newGO)

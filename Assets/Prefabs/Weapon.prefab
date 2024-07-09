@@ -123,22 +123,23 @@ MonoBehaviour:
   bulletPosition: {fileID: 798969650547782506}
   velocity: 20
   bulletLifeTime: 3
-  camera: {fileID: 0}
+  shootingCam: {fileID: 0}
+  cam: {fileID: 0}
   currentWeapon:
-    weapon: 1
-    isRanged: 1
+    weapon: 0
+    isRanged: 0
     currentAmmo: 0
     maxAmmo: 0
     reloadTime: 0
     attackInterval: 0
     velocity: 0
     damage: 0
-  shotInterval: 0.05
-  reloadTime: 2
+  shotInterval: 0
+  reloadTime: 0
   weapons:
   - weapon: 1
     isRanged: 1
-    currentAmmo: 0
+    currentAmmo: 500
     maxAmmo: 500
     reloadTime: 5
     attackInterval: 0.08
@@ -146,7 +147,7 @@ MonoBehaviour:
     damage: 0
   - weapon: 2
     isRanged: 1
-    currentAmmo: 0
+    currentAmmo: 12
     maxAmmo: 12
     reloadTime: 3
     attackInterval: 0.3

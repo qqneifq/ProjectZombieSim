@@ -16,9 +16,10 @@ public class Weapon : MonoBehaviour
     float velocity = 500f;
     [SerializeField]
     float bulletLifeTime = 3f;
-    Camera cam;
     [SerializeField]
-    GameObject camera;
+    GameObject shootingCam;
+    [SerializeField]
+    Camera cam;
     [SerializeField]
     WeaponModel currentWeapon;
     int weaponAmmo = 30;
@@ -31,7 +32,9 @@ public class Weapon : MonoBehaviour
     float reloadStartTime;
     WeaponType weaponType;
     [SerializeField]
-    public WeaponModel[] weapons;
+    WeaponModel[] weapons;
+
+    public GameObject ShootingCam { get => shootingCam; set => shootingCam = value; }
 
     void CycleWeapons()
     {
@@ -45,9 +48,8 @@ public class Weapon : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SetWeapon(weapons[0]);
         lastShotTime = Time.time;
-        cam = camera.GetComponent<Camera>();
+        cam = shootingCam.GetComponent<Camera>();
         CameraSync.OnCameraSwitched += SwitchCamera;
     }
 
@@ -114,8 +116,9 @@ public class Weapon : MonoBehaviour
 
     void SwitchCamera(GameObject camera)
     {
-        this.camera = camera;
-        cam = this.camera.GetComponent<Camera>();
+        Debug.Log("Switching shooting camera");
+        ShootingCam = camera;
+        cam = ShootingCam.GetComponent<Camera>();
     }
 
 
