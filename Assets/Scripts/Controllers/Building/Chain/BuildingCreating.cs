@@ -67,7 +67,7 @@ public class BuildingCreating : IChainPart
         if(Input.GetKeyDown(KeyCode.Q) && _floor.IsItPossibleToBuild(_building)) {
             _building.SetUsedPoints( _floor.TryToBuild(_building));
 
-            _handler.AddBuilding((_building, _buildingGO));
+            _handler.AddBuilding(_buildingGO);
             _building = null;
 
             _buildingGO.GetComponentInChildren<BoxCollider>().enabled = true;

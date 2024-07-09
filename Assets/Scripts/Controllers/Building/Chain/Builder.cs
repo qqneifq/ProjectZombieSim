@@ -13,7 +13,7 @@ public class Builder : MonoBehaviour, IBuildingChainHandler
 
     private ResourceHandler _resourceHandler;
 
-    private List<(BuildingContoller building, GameObject gameObject)> _buildings;
+    private List<GameObject> _buildings;
     private List<IChainPart> _chain;
 
     private int _buildingType;
@@ -26,7 +26,7 @@ public class Builder : MonoBehaviour, IBuildingChainHandler
         _buildingsFactory = FindObjectOfType<BuildingsFactory>();
 
         _chain = new List<IChainPart>();
-        _buildings = new List<(BuildingContoller building, GameObject gameObject)> ();
+        _buildings = new List<GameObject> ();
 
         _index = 0;
         _buildingType = 0;
@@ -34,7 +34,7 @@ public class Builder : MonoBehaviour, IBuildingChainHandler
         BuildingStart start = new BuildingStart(this, _floorController);
         BuildingChoose choose = new BuildingChoose(this, _face, _groundMask, _buildingsFactory, _raycastField, _floorController.GetDelta());
         BuildingCreating create = new BuildingCreating(this, _floorController, _face, _groundMask, _buildingsFactory, _raycastField, _floorController.GetDelta());
-        BuildingPostBuildingInit postInitOfBuildings = new BuildingPostBuildingInit(this);
+        BuildingPostBuildingInit postInitOfBuildings = new BuildingPostBuildingInit(this, _floorController, _buildingsFactory);
 
         _chain.Add(start);
         _chain.Add(choose);
@@ -48,17 +48,18 @@ public class Builder : MonoBehaviour, IBuildingChainHandler
         if(_index == 0 && _buildings.Count > 0)
         {
             _floorController.DestroyBuildingMap();
-            if (!_resourceHandler.IsEnoughResources(_buildings[0].building.GetConditions(), _buildings.Count))
+            if (!_resourceHandler.IsEnoughResources(_buildingsFactory.Get((BuildingsConsts.BuildingIndificator)_buildingType)._buildingConditions, _buildings.Count))
             {
                 foreach (var obj in _buildings)
                 {
-                    _floorController.ReleaseBuildingPoints(obj.building.getUsedPoints());
+                    BuildingContoller bc = obj.GetComponent<BuildingContoller>();
+                    _floorController.ReleaseBuildingPoints(bc.getUsedPoints());
 
                     GameObject.Destroy(obj.gameObject);
                 }
             } else
             {
-                _resourceHandler.RemoveResources(_buildings[0].building.GetConditions(), _buildings.Count);
+                _resourceHandler.RemoveResources(_buildingsFactory.Get((BuildingsConsts.BuildingIndificator)_buildingType)._buildingConditions, _buildings.Count);
             }
             _buildingType = 0;
             _buildings.Clear();
@@ -80,7 +81,7 @@ public class Builder : MonoBehaviour, IBuildingChainHandler
         return _buildingType;
     }
 
-    public void AddBuilding((BuildingContoller controller, GameObject gameObject) building)
+    public void AddBuilding(GameObject building)
     {
         _buildings.Add(building);
     }
@@ -102,12 +103,19 @@ public class Builder : MonoBehaviour, IBuildingChainHandler
 
         foreach (var obj in _buildings)
         {
-            _floorController.ReleaseBuildingPoints(obj.building.getUsedPoints());
+            BuildingContoller bc = obj.GetComponent<BuildingContoller>();
+
+            _floorController.ReleaseBuildingPoints(bc.getUsedPoints());
 
             GameObject.Destroy(obj.gameObject);
         }
 
         _buildings.Clear();
         _index = 0;
+    }
+
+    public void SetBuildings(List<GameObject> gameObjects)
+    {
+        _buildings = gameObjects;
     }
 }

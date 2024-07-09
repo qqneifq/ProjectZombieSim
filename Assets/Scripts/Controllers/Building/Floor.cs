@@ -76,7 +76,12 @@ public class Floor : MonoBehaviour
         deletePointsWithObject(points);
         _buildingMatrixController.ReleasePoints(points);
     }
-
+    public void ReleaseBuildingPoints(BuildingContoller buildingContoller)
+    {
+        if(buildingContoller == null || buildingContoller.getUsedPoints() == null) return;
+        deletePointsWithObject(buildingContoller.getUsedPoints());
+        _buildingMatrixController.ReleasePoints(buildingContoller.getUsedPoints());
+    }
     public GameObject GetGameObjectByPoint(Vector3 point)
     {
         (int x, int z) analyze = ((int)((point.x - _pointStart.position.x) / _matrixDivisionUnit), (int)((point.z - _pointStart.position.z) / _matrixDivisionUnit));

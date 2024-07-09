@@ -47,7 +47,7 @@ MonoBehaviour:
   _greenDebugPlane: {fileID: 5723541889750699613, guid: 85598f55208560e429908bf8c44f1251, type: 3}
   _redDebugPlane: {fileID: 1551663891582929958, guid: a72b568e61837c1418f24d2b4741fc02, type: 3}
   _pointStart: {fileID: 65251749410154225}
-  _size: {x: 16, y: 0, z: 10}
+  _size: {x: 100, y: 0, z: 100}
   _matrixDivisionUnit: 0.5
 --- !u!1 &1519763929213627925
 GameObject:
@@ -335,7 +335,12 @@ MonoBehaviour:
     _size: {x: 9, y: 3, z: 9}
     _name: Barracks
     _buildingIndificator: 2
-    _buildingConditions: 0000000000000000000000000000000000000000
+    _buildingConditions: 0a0000000a000000020000000200000000000000
+  - _gameBody: {fileID: 1915599280714895446, guid: c73625f22452c3a45a893f9ca7567474, type: 3}
+    _size: {x: 0.9, y: 2, z: 0.9}
+    _name: Wall
+    _buildingIndificator: 3
+    _buildingConditions: 0000000001000000000000000000000000000000
 --- !u!114 &6770122320987073964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -352,7 +357,7 @@ MonoBehaviour:
   _pivot: {fileID: 65251749410154225}
   _spawnSize: {x: 5, y: 0, z: 5}
   _zombieSize: {x: 0.25, y: 0, z: 0.25}
-  _zombieCreatingCoolDown: 10
+  _zombieCreatingCoolDown: 30
   _count: 10
 --- !u!114 &4593950638303822301
 MonoBehaviour:
@@ -366,7 +371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39690ecc0c06b4845bad2b97c98a4134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _resources: 0a0000000a000000030000000a00000000000000
+  _resources: 0a00000096000000030000000a00000000000000
   _maxResources: ffffffffffffffff06000000ffffffff00000000
 --- !u!1 &8304705278201871269
 GameObject:
