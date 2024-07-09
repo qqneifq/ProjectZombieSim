@@ -8,14 +8,14 @@ public class MapScanner : MonoBehaviour
 
     void Start()
     {
-        _floor = FindAnyObjectByType<Floor>();
+        /*_floor = FindAnyObjectByType<Floor>();
 
         MapBuilding[] list = FindObjectsOfType<MapBuilding>();
 
         foreach(var obj in list)
         {
-            _floor.TryToBuild((obj.getPivot().position, obj.getPivot().rotation), obj.getSize());
-        }
+            _floor.TryToBuild((obj.getPivot().position, obj.getPivot().rotation, gameObject), obj.getSize());
+        }*/
     }
 
 }

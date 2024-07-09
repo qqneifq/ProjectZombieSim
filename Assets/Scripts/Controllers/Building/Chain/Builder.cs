@@ -32,8 +32,8 @@ public class Builder : MonoBehaviour, IBuildingChainHandler
         _buildingType = 0;
 
         BuildingStart start = new BuildingStart(this, _floorController);
-        BuildingChoose choose = new BuildingChoose(this, _face, _groundMask, _buildingsFactory, _raycastField, _floorController.getDelta());
-        BuildingCreating create = new BuildingCreating(this, _floorController, _face, _groundMask, _buildingsFactory, _raycastField, _floorController.getDelta());
+        BuildingChoose choose = new BuildingChoose(this, _face, _groundMask, _buildingsFactory, _raycastField, _floorController.GetDelta());
+        BuildingCreating create = new BuildingCreating(this, _floorController, _face, _groundMask, _buildingsFactory, _raycastField, _floorController.GetDelta());
         BuildingPostBuildingInit postInitOfBuildings = new BuildingPostBuildingInit(this);
 
         _chain.Add(start);
@@ -47,6 +47,7 @@ public class Builder : MonoBehaviour, IBuildingChainHandler
         _index = (_index + 1) % _chain.Count;
         if(_index == 0 && _buildings.Count > 0)
         {
+            _floorController.DestroyBuildingMap();
             if (!_resourceHandler.IsEnoughResources(_buildings[0].building.GetConditions(), _buildings.Count))
             {
                 foreach (var obj in _buildings)
@@ -96,6 +97,7 @@ public class Builder : MonoBehaviour, IBuildingChainHandler
 
     public void Declain()
     {
+        _floorController.DestroyBuildingMap();
         _buildingType = 0;
 
         foreach (var obj in _buildings)

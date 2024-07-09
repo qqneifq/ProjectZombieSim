@@ -12,8 +12,7 @@ public class BuildingCreating : IChainPart
 
     private BuildingsFactory _buildingsFactory;
 
-    private BuildingContoller _building;
-    private BuildingContoller _buildingContoller;
+    private BuildingContoller _building = null;
     private GameObject _buildingGO = null;
 
     private float _raycastField;
@@ -38,6 +37,8 @@ public class BuildingCreating : IChainPart
             _buildingGO = GameObject.Instantiate(building._gameBody);
 
             _building = _buildingGO.GetComponent<BuildingContoller>();
+            _building.SetData(building);
+
             _buildingGO.GetComponentInChildren<BoxCollider>().enabled = false;
         }
 
