@@ -20,6 +20,8 @@ public class WeaponModel
     float attackInterval;
     [SerializeField]
     float velocity;
+    [SerializeField]
+    int damage;
 
     public bool IsRanged
     {
@@ -43,14 +45,16 @@ public class WeaponModel
 
     }
 
-    public WeaponModel(WeaponType w, int ammo, float reload, float interval, bool ranged)
+    public WeaponModel(WeaponType weapon, bool isRanged, int currentAmmo, int maxAmmo, float reloadTime, float attackInterval, float velocity, int damage)
     {
-        weapon = w;
-        isRanged = ranged;
-        maxAmmo = ammo;
-        currentAmmo = maxAmmo;
-        reloadTime = reload;
-        attackInterval = interval;
+        this.weapon = weapon;
+        this.isRanged = isRanged;
+        this.currentAmmo = currentAmmo;
+        this.maxAmmo = maxAmmo;
+        this.reloadTime = reloadTime;
+        this.attackInterval = attackInterval;
+        this.velocity = velocity;
+        this.damage = damage;
     }
 
     public void ReloadAmmo()

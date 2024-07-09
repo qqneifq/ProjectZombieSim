@@ -7,8 +7,8 @@ public static class WeaponTypes
     public enum WeaponType
     {
         empty = 0,
-        ranged1 = 1,
-        ranged2 = 2,
-        melee1 = 3
+        minigun = 1,
+        pistol = 2,
+        axe = 3
     }
 }

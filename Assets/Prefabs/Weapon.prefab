@@ -124,16 +124,42 @@ MonoBehaviour:
   velocity: 20
   bulletLifeTime: 3
   camera: {fileID: 0}
-  shotInterval: 0.05
-  reloadTime: 2
-  weapons:
-  - weapon: 0
-    isRanged: 0
+  currentWeapon:
+    weapon: 1
+    isRanged: 1
     currentAmmo: 0
     maxAmmo: 0
     reloadTime: 0
     attackInterval: 0
-  test: 
+    velocity: 0
+    damage: 0
+  shotInterval: 0.05
+  reloadTime: 2
+  weapons:
+  - weapon: 1
+    isRanged: 1
+    currentAmmo: 0
+    maxAmmo: 500
+    reloadTime: 5
+    attackInterval: 0.08
+    velocity: 100
+    damage: 0
+  - weapon: 2
+    isRanged: 1
+    currentAmmo: 0
+    maxAmmo: 12
+    reloadTime: 3
+    attackInterval: 0.3
+    velocity: 20
+    damage: 0
+  - weapon: 3
+    isRanged: 0
+    currentAmmo: 0
+    maxAmmo: 0
+    reloadTime: 0
+    attackInterval: 1
+    velocity: 0
+    damage: 0
 --- !u!1 &8885708745992223206
 GameObject:
   m_ObjectHideFlags: 0

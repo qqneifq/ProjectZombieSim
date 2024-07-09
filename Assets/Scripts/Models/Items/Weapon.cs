@@ -19,7 +19,7 @@ public class Weapon : MonoBehaviour
     Camera cam;
     [SerializeField]
     GameObject camera;
-
+    [SerializeField]
     WeaponModel currentWeapon;
     int weaponAmmo = 30;
     bool isReloading = false;
@@ -33,21 +33,19 @@ public class Weapon : MonoBehaviour
     [SerializeField]
     public WeaponModel[] weapons;
 
-    [SerializeField]
-    public int[] test;
     void CycleWeapons()
     {
         
     }
-    void SetWeapon(WeaponType wt)
+    void SetWeapon(WeaponModel w)
     {
-
+        currentWeapon = w;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        currentWeapon = weapons[0];
+        SetWeapon(weapons[0]);
         lastShotTime = Time.time;
         cam = camera.GetComponent<Camera>();
         CameraSync.OnCameraSwitched += SwitchCamera;
@@ -56,6 +54,10 @@ public class Weapon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(currentWeapon == null)
+        {
+            SetWeapon(weapons[0]);
+        }
         if(Input.GetKey(KeyCode.Mouse0))
         {
             if (currentWeapon.IsRanged)
@@ -97,7 +99,7 @@ public class Weapon : MonoBehaviour
         bullet.GetComponent<Rigidbody>().useGravity = false;
         // push bullet
         bullet.GetComponent<Rigidbody>().AddForce(shootDirection * velocity, ForceMode.Impulse);
-        weaponAmmo--;
+        currentWeapon.ShootAmmo();
         Debug.Log("Shoot bullet");
         // destroy after time
         StartCoroutine(DestroyBulletAfterTime(bullet, bulletLifeTime));
