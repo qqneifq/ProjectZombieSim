@@ -165,6 +165,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5908596613938075827}
   - component: {fileID: 4703934682668679636}
+  - component: {fileID: 4593950638303822301}
   m_Layer: 0
   m_Name: MainPoint
   m_TagString: MainPoint
@@ -207,10 +208,26 @@ MonoBehaviour:
     _size: {x: 9, y: 3, z: 9}
     _name: House
     _buildingIndificator: 0
+    _buildingConditions: 0000000000000000000000000000000000000000
   - _gameBody: {fileID: 4350577159686599515, guid: 3d32e0159f1d76d4fbc681bf6a2a82ae, type: 3}
     _size: {x: 9, y: 3, z: 9}
     _name: Barracks
     _buildingIndificator: 2
+    _buildingConditions: 0000000000000000000000000000000000000000
+--- !u!114 &4593950638303822301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4095841178987905719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39690ecc0c06b4845bad2b97c98a4134, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _resources: 0a0000000a000000030000000a00000000000000
+  _maxResources: ffffffffffffffff06000000ffffffff00000000
 --- !u!1 &8304705278201871269
 GameObject:
   m_ObjectHideFlags: 0

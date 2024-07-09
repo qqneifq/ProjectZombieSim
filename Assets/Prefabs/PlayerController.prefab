@@ -441,6 +441,7 @@ MonoBehaviour:
   _gravity: -9.81
   _groundDistance: 0.4
   _jumpHeight: 1.06
+<<<<<<< HEAD
 --- !u!114 &2557057625861533844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -474,6 +475,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstCam: {fileID: 0}
   thirdCam: {fileID: 0}
+=======
+>>>>>>> 847a30d31398c0d999f944f1bf8777e08c998b87
 --- !u!1 &7078208442526265975
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,51 +1,62 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ResourceHandler : MonoBehaviour
 {
-    private List<int> resources;
+    [SerializeField] private List<int> _resources;
+    [SerializeField] private List<int> _maxResources;
+    //-1 - we can have unlimited count of resource, 0 - we cant have this type of resources, 1+ - we can have as much as we need
 
-    private void Start()
+    public void PlusResources()
     {
-        resources = new List<int>();
+        _resources.Add(0);
     }
 
+    public void PlusMaxResources()
+    {
+        _maxResources.Add(0);
+    }
     public void AddResource(int index, int count)
     {
-        resources[index] += count;
+        if (_resources[index] + count > _maxResources[index] && _maxResources[index] > 0)
+        {
+            _resources[index] = _maxResources[index];
+        }
+        _resources[index] += count;
     }
 
     public void AddResources(List<int> resourcesOnAdd)
     {
-        for(int i = 0; i < resources.Count; i++)
+        for(int i = 0; i < _resources.Count; i++)
         {
             AddResource(i, resourcesOnAdd[i]);
         }
     }
 
-    public void RemoveResource(int index, int count) 
+    public void RemoveResource(int index, int count, int number) 
     {
-        resources[index] -= count;
+        _resources[index] -= count*number;
     }
 
-    public void RemoveResources(List<int> resourcesOnDelete)
+    public void RemoveResources(List<int> resourcesOnDelete, int number)
     {
-        for(int i = 0; i < resources.Count; i++)
+        for(int i = 0; i < _resources.Count; i++)
         {
-            RemoveResource(i, resourcesOnDelete[i]);
+            RemoveResource(i, resourcesOnDelete[i], number);
         }
     }
 
-    public bool IsEnoughResource(int index, int count)
+    public bool IsEnoughResource(int index, int count, int number)
     {
-        return resources[index] >= count;
+        return _resources[index] >= count*number;
     }
 
-    public bool IsEnoughResources(List<int> resourcesOnCheck) { 
-        for(int i =0; i < resources.Count;i++)
+    public bool IsEnoughResources(List<int> resourcesOnCheck, int number) { 
+        for(int i =0; i < _resources.Count;i++)
         {
-            if(!IsEnoughResource(i, resourcesOnCheck[i]))
+            if(!IsEnoughResource(i, resourcesOnCheck[i], number))
             {
                 return false;
             }
@@ -54,4 +65,17 @@ public class ResourceHandler : MonoBehaviour
         return true;
     }
     
+    public void AddResourceToMax(int index, int count, int number)
+    {
+        _maxResources[index] += count*number;
+    }
+
+    public void AddResourcesToMax(List<int> resourcesOnAdd, int number)
+    {
+        for(int i = 0; i < _resources.Count; i++)
+        {
+            AddResourceToMax(i, resourcesOnAdd[i], number);
+        }
+    }
+
 }
