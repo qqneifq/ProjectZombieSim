@@ -35,6 +35,8 @@ public class Weapon : MonoBehaviour
 
     public GameObject ShootingCam { get => shootingCam; set => shootingCam = value; }
 
+    public static event Action<GameObject, float> OnHit;
+
     void CycleWeapons()
     {
         Debug.Log($"Current number {weaponNumber}");
@@ -113,7 +115,9 @@ public class Weapon : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 1f))
         {
             Debug.Log($"Melee hit {hit.collider.gameObject.name}");
+            OnHit?.Invoke(hit.collider.gameObject, currentWeapon.Damage);
         }
+        // hit.collider.gameObject.GetComponent<Enemy>().Health--;
     }
 
     void RangedAttack()
@@ -132,6 +136,7 @@ public class Weapon : MonoBehaviour
 
         // create bullet
         GameObject bullet = Instantiate(bulletPrefab, bulletPosition.position, Quaternion.identity);
+        bullet.GetComponent<Bullet>().Damage = currentWeapon.Damage;
         bullet.GetComponent<Rigidbody>().useGravity = false;
         // push bullet
         bullet.GetComponent<Rigidbody>().AddForce(shootDirection * currentWeapon.Velocity, ForceMode.Impulse);
@@ -141,6 +146,7 @@ public class Weapon : MonoBehaviour
         StartCoroutine(DestroyBulletAfterTime(bullet, bulletLifeTime));
 
     }
+
 
     private IEnumerator DestroyBulletAfterTime(GameObject bullet, float delay)
     {

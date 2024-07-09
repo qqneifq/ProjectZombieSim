@@ -21,7 +21,7 @@ public class WeaponModel
     [SerializeField]
     float velocity;
     [SerializeField]
-    int damage;
+    float damage;
 
     public bool IsRanged
     {
@@ -42,6 +42,13 @@ public class WeaponModel
     public float Velocity
     {
         get { return velocity; }
+    }
+    public float Damage 
+    {
+        get
+        {
+            return damage; 
+        } 
     }
 
     public WeaponModel()

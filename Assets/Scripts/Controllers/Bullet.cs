@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
@@ -5,17 +6,24 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    // Start is called before the first frame update
+    float damage;
+    public float Damage
+    {
+        get { return damage; }
+        set { damage = value; }
+    }
+    public static event Action<GameObject, float> OnBulletHit;
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         
     }
+
+    //here you can choose what to do with bullets hitting something. naprimer if collision.collider eto vrag,
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log($"Hit {collision.collider.gameObject.name}");
@@ -23,5 +31,7 @@ public class Bullet : MonoBehaviour
         {
             Destroy(gameObject);
         }
+            OnBulletHit?.Invoke(collision.collider.gameObject, damage);
+        //collision.collider.gameObject.getComponent<Enemy>.Health--;
     }
 }

@@ -4,15 +4,7 @@ using UnityEngine;
 
 public class ResourceController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    ResourceModel rModel;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
