@@ -14,7 +14,7 @@ public class MouseLook : MonoBehaviour
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        _mouseSensetivity = _mouseSensetivitySlider.value;
+       // _mouseSensetivity = _mouseSensetivitySlider.value;
 
         xRotation = 0f;
 
