@@ -14,6 +14,10 @@ public class BuildingContoller : MonoBehaviour
     public void SetData(Building data) { 
         _data = data;
     }
+    public List<int> GetConditions()
+    {
+        return _data._buildingConditions;
+    }
     public BuildingsConsts.BuildingIndificator GetIndificator()
     {
         return _data.getBuildingIndificator();

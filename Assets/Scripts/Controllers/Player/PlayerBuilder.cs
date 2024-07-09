@@ -6,20 +6,13 @@ using static BuildingsConsts;
 
 public class PlayerBuilder : MonoBehaviour
 {
-    [SerializeField] private Transform _face;
-    [SerializeField] private LayerMask _groundMask;
 
-    [SerializeField] private BuildingsFactory _buildingsFactory;
-    [SerializeField] private float _raycastField;
-    [SerializeField] private float _rotationSpeed;
 
-    private Floor _floorController;
     private GameObject _buildingGO = null;
 
+    private BuildingIndificator _buildingIndificator;
     private Building _building;
     private bool _isBuilding;
-    private float _wheel;
-    private BuildingIndificator _buildingIndificator;
 
     private static event Action<String> onBuildingIdChange;
     private static event Action<bool> onBuildingRequest;
@@ -49,39 +42,11 @@ public class PlayerBuilder : MonoBehaviour
 
     private void Start()
     {
-        _wheel = 0;
-        _floorController = FindObjectOfType<Floor>();
+
     }
     void Update()
     {
-        RaycastHit hit;
-        Vector3 fwd = _face.forward;
-
-        Debug.DrawRay(_face.position + fwd * 1, fwd, Color.blue);
-        //Move
-        if(_buildingGO != null && Physics.Raycast(_face.position, fwd, out hit, _raycastField, _groundMask))
-        {
-            _buildingGO.transform.position = new Vector3(hit.point.x - hit.point.x % _floorController.getDelta(), hit.point.y + _building._size.y/2, hit.point.z - hit.point.z % _floorController.getDelta());
-        }
-
-        //rotating
-        if (_buildingGO != null )
-        {
-           if (Input.GetKeyDown(KeyCode.R))
-           {
-                _buildingGO.transform.Rotate(Vector3.up, 90);
-           } else if (Input.GetKeyDown(KeyCode.T))
-           {
-                _buildingGO.transform.Rotate(Vector3.up, -90);
-
-           }
-        }
-        BuildingContoller buildingContoller = null;
-        if (_building != null)
-        {
-            buildingContoller = _buildingGO.GetComponent<BuildingContoller>();
-            buildingContoller.SetData(_building);
-        }
+        
 
         //Open\Close\Create\Destroy
         if (Input.GetKeyDown(KeyCode.Z) && Physics.Raycast(_face.position, fwd, out hit, _raycastField) && (hit.transform.CompareTag("Building") || hit.transform.CompareTag("Storage"))) {
@@ -93,28 +58,20 @@ public class PlayerBuilder : MonoBehaviour
 
             Destroy(hit.transform.gameObject);
         }
-        else if (_building == null && Input.GetKeyDown(KeyCode.B) && !_isBuilding && Physics.Raycast(_face.position, fwd, out hit, _raycastField, _groundMask)) {
-             _floorController.CreateBuildingMap();
-            _building = _buildingsFactory.Get(0);
-            //onBuildingIdChange?.Invoke(_building.getName());
-            _buildingGO = Instantiate(_building._gameBody);
-            _buildingGO.GetComponentInChildren<BoxCollider>().isTrigger = true;
-
-            _buildingIndificator = 0;
-            _isBuilding = true;
-
-            //onBuildingRequest?.Invoke(true);
-        }
+        else 
         else if (_buildingGO != null && Input.GetKeyDown(KeyCode.Q)
-            && _floorController.IsItPossibleToBuild(buildingContoller)){
+            && _floorController.IsItPossibleToBuild(buildingContoller)
+            && _resourceHandler.IsEnoughResources(_building._buildingConditions))
+        {
             _buildingGO.GetComponentInChildren<BoxCollider>().isTrigger = false;
             _floorController.TryToBuild(buildingContoller);
             _floorController.DestroyBuildingMap();
+            _resourceHandler.RemoveResources(_building._buildingConditions);
 
             _building = null;
             _buildingGO = null;
             _isBuilding = false;
-            //onBuildingRequest?.Invoke(false);
+            onBuildingRequest?.Invoke(false);
 
         }
         else if (_buildingGO != null && Input.GetKeyDown(KeyCode.Escape)) {
@@ -125,5 +82,10 @@ public class PlayerBuilder : MonoBehaviour
 
             _building = null;
         }
+    }
+
+    public void ChangeGameObject(GameObject newGO)
+    {
+
     }
 }
