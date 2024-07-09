@@ -13,32 +13,41 @@ public class Weapon : MonoBehaviour
     [SerializeField]
     Transform bulletPosition;
     [SerializeField]
-    float velocity = 500f;
-    [SerializeField]
     float bulletLifeTime = 3f;
+
+    [SerializeField]
+    GameObject meleeCollider;
+
     [SerializeField]
     GameObject shootingCam;
     [SerializeField]
     Camera cam;
+
     [SerializeField]
     WeaponModel currentWeapon;
-    int weaponAmmo = 30;
-    bool isReloading = false;
-    float lastShotTime;
-    [SerializeField]
-    float shotInterval = 0.2f;
-    [SerializeField]
-    float reloadTime = 2f;
-    float reloadStartTime;
-    WeaponType weaponType;
+    int weaponNumber;
     [SerializeField]
     WeaponModel[] weapons;
+
+    bool isReloading = false;
+    float lastShotTime;
+    float reloadStartTime;
 
     public GameObject ShootingCam { get => shootingCam; set => shootingCam = value; }
 
     void CycleWeapons()
     {
-        
+        Debug.Log($"Current number {weaponNumber}");
+        if (weaponNumber < weapons.Length - 1)
+        {
+            weaponNumber++;
+        }
+        else
+        {
+            weaponNumber = 0;
+        }
+        currentWeapon = weapons[weaponNumber];
+        Debug.Log($"Current number {weaponNumber}");
     }
     void SetWeapon(WeaponModel w)
     {
@@ -51,6 +60,7 @@ public class Weapon : MonoBehaviour
         lastShotTime = Time.time;
         cam = shootingCam.GetComponent<Camera>();
         CameraSync.OnCameraSwitched += SwitchCamera;
+        SetWeapon(weapons[weaponNumber]);
     }
 
     // Update is called once per frame
@@ -66,12 +76,20 @@ public class Weapon : MonoBehaviour
             {
                 if (Time.time - lastShotTime > currentWeapon.AttackInterval && currentWeapon.CurrentAmmo > 0 && !isReloading)
                 {
-                    ShootRanged();
+                    RangedAttack();
                     lastShotTime = Time.time;
                 }
-                else if (weaponAmmo <= 0 && !isReloading)
+                else if (currentWeapon.CurrentAmmo <= 0 && !isReloading)
                 {
                     Reload();
+                }
+            }
+            else
+            {
+                if(Time.time - lastShotTime > currentWeapon.AttackInterval)
+                {
+                    MeleeAttack();
+                    lastShotTime = Time.time;
                 }
             }
         }
@@ -79,10 +97,26 @@ public class Weapon : MonoBehaviour
         {
             Reload();
         }
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            CycleWeapons();
+        }
         
     }
 
-    void ShootRanged()
+    void MeleeAttack()
+    {
+
+        Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 1f))
+        {
+            Debug.Log($"Melee hit {hit.collider.gameObject.name}");
+        }
+    }
+
+    void RangedAttack()
     {
         Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
         RaycastHit hit;
@@ -100,7 +134,7 @@ public class Weapon : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab, bulletPosition.position, Quaternion.identity);
         bullet.GetComponent<Rigidbody>().useGravity = false;
         // push bullet
-        bullet.GetComponent<Rigidbody>().AddForce(shootDirection * velocity, ForceMode.Impulse);
+        bullet.GetComponent<Rigidbody>().AddForce(shootDirection * currentWeapon.Velocity, ForceMode.Impulse);
         currentWeapon.ShootAmmo();
         Debug.Log("Shoot bullet");
         // destroy after time

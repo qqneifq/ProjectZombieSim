@@ -39,6 +39,10 @@ public class WeaponModel
     {
         get { return currentAmmo; }
     }
+    public float Velocity
+    {
+        get { return velocity; }
+    }
 
     public WeaponModel()
     {
