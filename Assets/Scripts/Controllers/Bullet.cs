@@ -18,10 +18,10 @@ public class Bullet : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        Destroy(gameObject);
-        if(false)
+        Debug.Log($"Hit {collision.collider.gameObject.name}");
+        if(collision.collider.gameObject.name != "Weapon")
         {
-            //do some collision logic
+            Destroy(gameObject);
         }
     }
 }

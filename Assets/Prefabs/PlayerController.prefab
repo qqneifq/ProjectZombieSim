@@ -153,6 +153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstCam: {fileID: 8230580787484261706}
   thirdCam: {fileID: 7584355519009451707}
+  currentCam: {fileID: 0}
 --- !u!1 &5017130307122265198
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,8 +457,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 452ca4e58606ae0449baa6d2c06ad064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstCam: {fileID: 0}
-  thirdCam: {fileID: 0}
+  firstCam: {fileID: 8230580787484261706}
+  thirdCam: {fileID: 7584355519009451707}
+  currentCam: {fileID: 0}
 --- !u!1 &7078208442526265975
 GameObject:
   m_ObjectHideFlags: 0
