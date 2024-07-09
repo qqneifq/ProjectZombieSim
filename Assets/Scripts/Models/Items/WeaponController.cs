@@ -39,6 +39,7 @@ public class WeaponController : MonoBehaviour
     public GameObject ShootingCam { get => shootingCam; set => shootingCam = value; }
 
     public static event Action<GameObject, float> OnHit;
+    public static event Action<int> OnWeaponChange;
 
     void CycleWeapons()
     {
@@ -52,6 +53,7 @@ public class WeaponController : MonoBehaviour
             weaponNumber = 0;
         }
         currentWeapon = weapons[weaponNumber];
+        OnWeaponChange?.Invoke(weaponNumber);
         Debug.Log($"Current number {weaponNumber}");
     }
     void SetWeapon(WeaponModel w)

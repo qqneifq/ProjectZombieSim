@@ -10,6 +10,14 @@ public class ResourceHandler : MonoBehaviour
     //-1 - we can have unlimited count of resource, 0 - we cant have this type of resources, 1+ - we can have as much as we need
     public static event Action<int, int, int> OnResourceChange;
 
+    //initialize UI
+    private void Start()
+    {
+        for(int i = 0; i < _resources.Count; i++)
+        {
+            OnResourceChange?.Invoke(i, _resources[i], _maxResources[i]);
+        }
+    }
 
     public void PlusResources()
     {
@@ -26,7 +34,10 @@ public class ResourceHandler : MonoBehaviour
         {
             _resources[index] = _maxResources[index];
         }
-        _resources[index] += count;
+        else
+        {
+            _resources[index] += count;
+        }
         OnResourceChange?.Invoke(index, _resources[index], _maxResources[index]);
     }
 
