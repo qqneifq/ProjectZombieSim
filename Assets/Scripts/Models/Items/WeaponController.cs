@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using static WeaponTypes;
 
-public class Weapon : MonoBehaviour
+public class WeaponController : MonoBehaviour
 {
 
     [SerializeField]
@@ -14,6 +14,9 @@ public class Weapon : MonoBehaviour
     Transform bulletPosition;
     [SerializeField]
     float bulletLifeTime = 3f;
+    [SerializeField]
+    GameObject meleePosition;
+
 
     [SerializeField]
     GameObject meleeCollider;
@@ -108,11 +111,11 @@ public class Weapon : MonoBehaviour
 
     void MeleeAttack()
     {
-
-        Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+        Vector3 fwd = meleePosition.transform.TransformDirection(Vector3.forward);
+        Ray ray = new Ray(meleePosition.transform.position, fwd);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, 1f))
+        if (Physics.Raycast(ray, out hit, 2f))
         {
             Debug.Log($"Melee hit {hit.collider.gameObject.name}");
             OnHit?.Invoke(hit.collider.gameObject, currentWeapon.Damage);

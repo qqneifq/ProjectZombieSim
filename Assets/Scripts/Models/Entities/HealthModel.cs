@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// put on attackable world objects
 public class HealthModel : MonoBehaviour
 {
     [SerializeField]
@@ -19,11 +20,16 @@ public class HealthModel : MonoBehaviour
     {
         if(h > armor)
         {
-            health -= h;
-            if(health < 0)
-            {
-                OnDeath?.Invoke(gameObject);
-            }
+            health -= h - armor;
+            
+        }
+        else
+        {
+            health--;
+        }
+        if (health <= 0)
+        {
+            OnDeath?.Invoke(gameObject);
         }
     }
 }

@@ -8,6 +8,8 @@ public class ResourceHandler : MonoBehaviour
     [SerializeField] private List<int> _resources;
     [SerializeField] private List<int> _maxResources;
     //-1 - we can have unlimited count of resource, 0 - we cant have this type of resources, 1+ - we can have as much as we need
+    public static event Action<int, int, int> OnResourceChange;
+
 
     public void PlusResources()
     {
@@ -25,6 +27,7 @@ public class ResourceHandler : MonoBehaviour
             _resources[index] = _maxResources[index];
         }
         _resources[index] += count;
+        OnResourceChange?.Invoke(index, _resources[index], _maxResources[index]);
     }
 
     public void AddResources(List<int> resourcesOnAdd)

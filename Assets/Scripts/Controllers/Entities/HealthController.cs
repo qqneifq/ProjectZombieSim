@@ -1,15 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static ResourceTypes;
 
 public class HealthController : MonoBehaviour
 {
-    
+    public static event Action<ResourcesEnum, int> OnResourceHit;
     // Start is called before the first frame update
     void Start()
     {
         Bullet.OnBulletHit += TargetHitHandler;
-        Weapon.OnHit += TargetHitHandler;
+        WeaponController.OnHit += TargetHitHandler;
         HealthModel.OnDeath += DestroyOnDeath;
     }
 
@@ -21,10 +23,14 @@ public class HealthController : MonoBehaviour
 
     void TargetHitHandler(GameObject o, float d)
     {
-        var hModel = o.GetComponent<HealthModel>();
-        if (hModel != null)
+        if (o.GetComponent<HealthModel>() != null)
         {
-            hModel.RemoveHealth(d);
+            o.GetComponent<HealthModel>().RemoveHealth(d);
+            
+        }
+        if (o.GetComponent<ResourceModel>() != null)
+        {
+            OnResourceHit?.Invoke(o.GetComponent<ResourceModel>().Type, (int)d);
         }
     }
 
