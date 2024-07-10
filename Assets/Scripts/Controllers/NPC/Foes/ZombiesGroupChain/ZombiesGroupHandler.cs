@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,7 @@ public class ZombiesGroupHandler : MonoBehaviour, IZombiesChainHandler
 
     void Start()
     {
+
         _zombies = new HashSet<ZombieMainController>();
         _parts = new List<IChainPart>();
 
