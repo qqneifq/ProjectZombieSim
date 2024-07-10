@@ -31,6 +31,12 @@ public class Bullet : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        IDestroyable destroyableScript = collision.collider.gameObject.GetComponent<IDestroyable>();
+
+        if (destroyableScript != null ) { 
+            destroyableScript.RemoveHealth(damage);
+        }
             OnBulletHit?.Invoke(collision.collider.gameObject, damage);
         //collision.collider.gameObject.getComponent<Enemy>.Health--;
     }

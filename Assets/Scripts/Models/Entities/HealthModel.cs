@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // put on attackable world objects
-public class HealthModel : MonoBehaviour
+public class HealthModel : MonoBehaviour, IDestroyable
 {
     [SerializeField]
     float health;
@@ -16,11 +16,11 @@ public class HealthModel : MonoBehaviour
         this.health = health;
         this.armor = armor;
     }
-    public void RemoveHealth(float h)
+    public void RemoveHealth(double h)
     {
         if(h > armor)
         {
-            health -= h - armor;
+            health -= (float)h - armor;
             
         }
         else
@@ -31,5 +31,15 @@ public class HealthModel : MonoBehaviour
         {
             OnDeath?.Invoke(gameObject);
         }
+    }
+
+    public void AddHealth(double health)
+    {
+        this.health += (float)health;
+    }
+
+    public bool IsAlive()
+    {
+        return health > 0;
     }
 }

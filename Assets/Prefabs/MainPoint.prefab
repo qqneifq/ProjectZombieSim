@@ -284,6 +284,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5908596613938075827}
+  - component: {fileID: -3445641307734937026}
   - component: {fileID: 4703934682668679636}
   - component: {fileID: 6770122320987073964}
   - component: {fileID: 4593950638303822301}
@@ -313,6 +314,19 @@ Transform:
   - {fileID: 3643528624043075979}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-3445641307734937026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4095841178987905719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ec4943324134b44ebd6d884c3971787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourceHandler: {fileID: 4095841178987905719}
 --- !u!114 &4703934682668679636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -358,7 +372,7 @@ MonoBehaviour:
   _spawnSize: {x: 5, y: 0, z: 5}
   _zombieSize: {x: 0.25, y: 0, z: 0.25}
   _zombieCreatingCoolDown: 30
-  _count: 10
+  _count: 100
 --- !u!114 &4593950638303822301
 MonoBehaviour:
   m_ObjectHideFlags: 0
