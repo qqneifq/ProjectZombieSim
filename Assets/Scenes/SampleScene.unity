@@ -982,6 +982,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5530738983389108829, guid: 4a140a398233fae4db34e568ecfcd4f1, type: 3}
+      propertyPath: threshold
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5530738983389108829, guid: 4a140a398233fae4db34e568ecfcd4f1, type: 3}
+      propertyPath: cameraTransform
+      value: 
+      objectReference: {fileID: 2140759282}
+    - target: {fileID: 5530738983389108829, guid: 4a140a398233fae4db34e568ecfcd4f1, type: 3}
+      propertyPath: requiredDuration
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7304480504848994316, guid: 4a140a398233fae4db34e568ecfcd4f1, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1005,6 +1017,14 @@ PrefabInstance:
     - target: {fileID: 7304480504848994316, guid: 4a140a398233fae4db34e568ecfcd4f1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7723006057605646114, guid: 4a140a398233fae4db34e568ecfcd4f1, type: 3}
+      propertyPath: stages.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7723006057605646114, guid: 4a140a398233fae4db34e568ecfcd4f1, type: 3}
+      propertyPath: stages.Array.data[1]
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8188659467795859871, guid: 4a140a398233fae4db34e568ecfcd4f1, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4114,6 +4134,11 @@ MonoBehaviour:
 --- !u!1 &2140759279 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6370289305888634083, guid: 7499f27a81ee05f439bf7eeeba1462a0, type: 3}
+  m_PrefabInstance: {fileID: 706160227}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2140759282 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2390328153576144492, guid: 7499f27a81ee05f439bf7eeeba1462a0, type: 3}
   m_PrefabInstance: {fileID: 706160227}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6143577648799367751
