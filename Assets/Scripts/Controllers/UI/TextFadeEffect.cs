@@ -6,23 +6,32 @@ public class TextFadeEffect : MonoBehaviour
 {
     public TextMeshProUGUI questName;
     public TextMeshProUGUI questDescription;
+    public TextMeshProUGUI questCompleted;
     public float fadeDuration = 1.0f;
     public float delayBeforeNewText = 2.0f;
 
     private void Awake()
     {
-        QuestController.OnQuestStart += OnQuestTextStart;
+        QuestController.OnQuestShow += OnQuestTextStart;
     }
 
     void OnQuestTextStart(string name, string description)
     {
-        Debug.Log($"Loading quest {name}/{description}");
+        Debug.Log($"Showing quest {name}/{description}");
         StartCoroutine(ChangeTextWithFade(questName, name));
         StartCoroutine(ChangeTextWithFade(questDescription, description));
     }
+    public IEnumerator ShowCompleted()
+    {
+        questCompleted.text = "Complete!";
+        yield return new WaitForSeconds(2f);
+        questCompleted.text = "";
+    }
+
 
     public IEnumerator ChangeTextWithFade(TextMeshProUGUI textObject, string newText)
     {
+        yield return StartCoroutine(ShowCompleted());
         // ????????? fade-out
         yield return StartCoroutine(FadeTextToZeroAlpha(fadeDuration, textObject));
 

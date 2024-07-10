@@ -19,7 +19,7 @@ public class BarMenuController : MonoBehaviour
         slots = new Transform[9];
         foreach(Transform child in bar.transform)
         {
-            Debug.Log($"{child.gameObject.name}");
+            //Debug.Log($"{child.gameObject.name}");
         }
         WeaponController.OnWeaponChange += WeaponChangeHandler;
     }

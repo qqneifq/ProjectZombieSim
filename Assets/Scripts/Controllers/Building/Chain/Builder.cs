@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -81,9 +82,12 @@ public class Builder : MonoBehaviour, IBuildingChainHandler
         return _buildingType;
     }
 
+    // event for tutorial
+    public static event Action OnBuildingBuilt;
     public void AddBuilding(GameObject building)
     {
         _buildings.Add(building);
+        OnBuildingBuilt?.Invoke();
     }
 
     public List<GameObject> GetAllObjectsInQueue()

@@ -1,79 +1,64 @@
 using System;
 using UnityEngine;
+using static QuestController;
 
-public class MouseMovementTrack : MonoBehaviour
+public class CameraQuest : BasicQuestModel
 {
+    [SerializeField]
     public Transform cameraTransform;
-    public float threshold = 10f; // ??????????? ????????? ???? ??? ???????????? ????????
-    public float requiredDuration = 4f; // ????????? ????????????????? ??????? ? ????????
-    bool isCompleted;
+    public float threshold = 10f;
+    [SerializeField]
+    private bool lookedRight = false;
+    [SerializeField]
+    private bool lookedLeft = false;
     [SerializeField]
     private bool lookedUp = false;
     [SerializeField]
     private bool lookedDown = false;
-    [SerializeField]
-    private bool lookedLeft = false;
-    [SerializeField]
-    private bool lookedRight = false;
-    private bool taskStarted = false;
-    private float taskStartTime = 0f;
-
     private Vector3 initialCameraRotation;
 
-    void Start()
+    public override void OnStart()
     {
         initialCameraRotation = cameraTransform.eulerAngles;
+        base.OnStart();
     }
+
 
     void Update()
     {
-        if (!isCompleted)
+
+        if (taskStarted)
         {
             Vector3 currentCameraRotation = cameraTransform.eulerAngles;
-            Vector3 deltaRotation = currentCameraRotation - initialCameraRotation;
 
-            if (!taskStarted)
+            // ???????????? ???? ????????
+            float horizontalAngle = Mathf.DeltaAngle(initialCameraRotation.y, currentCameraRotation.y);
+            float verticalAngle = Mathf.DeltaAngle(initialCameraRotation.x, currentCameraRotation.x);
+
+            // ????????? ???????????
+            if (horizontalAngle > threshold)
             {
-                if (deltaRotation.magnitude > threshold)
-                {
-                    taskStarted = true;
-                    taskStartTime = Time.time;
-                }
+                lookedRight = true;
+            }
+            if (horizontalAngle < -threshold)
+            {
+                lookedLeft = true;
+            }
+            if (verticalAngle > threshold)
+            {
+                lookedUp = true;
+            }
+            if (verticalAngle < -threshold)
+            {
+                lookedDown = true;
             }
 
-            if (taskStarted)
+            // ?????????, ??? ??? ??????????? ????????????? ? ?????? ?? ????? 10 ??????
+            if (lookedRight && lookedLeft && lookedUp && lookedDown && (Time.time - taskStartTime >= requiredDuration))
             {
-                if (deltaRotation.x > threshold)
-                {
-                    lookedUp = true;
-                }
-                if (deltaRotation.x < -threshold)
-                {
-                    lookedDown = true;
-                }
-                if (deltaRotation.y < -threshold)
-                {
-                    lookedLeft = true;
-                }
-                if (deltaRotation.y > threshold)
-                {
-                    lookedRight = true;
-                }
-
-                if (lookedUp && lookedDown && lookedLeft && lookedRight && Time.time - taskStartTime >= requiredDuration)
-                {
-                    Debug.Log("Player looked in all four directions for at least 4 seconds.");
-                    CompleteTask();
-                }
-
-                initialCameraRotation = currentCameraRotation;
+                Debug.Log("Player looked in all required directions for at least 10 seconds.");
+                CompleteTask();
             }
         }
-    }
-    public static event Action<QuestController.TutorialStage> OnStageCompleted;
-    private void CompleteTask()
-    {
-        isCompleted = true;
-        OnStageCompleted?.Invoke(QuestController.TutorialStage.camera);
     }
 }

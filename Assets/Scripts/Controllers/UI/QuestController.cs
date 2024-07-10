@@ -8,9 +8,10 @@ public class QuestController : MonoBehaviour
 {
     [SerializeField]
     QuestStage[] stages;
-
-    public static event Action<string, string> OnQuestStart;
-
+    [SerializeField]
+    bool tutorialStarted;
+    public static event Action<string, string> OnQuestShow;
+    public static event Action<TutorialStage> OnQuestStart;
     public enum TutorialStage
     {
         camera = 0,
@@ -20,28 +21,40 @@ public class QuestController : MonoBehaviour
         building = 4,
         completed = 5
     }
+    [SerializeField]
     bool isCompleted;
     [SerializeField]
-    TutorialStage currentStage;
+    TutorialStage currentStage = TutorialStage.camera;
     void Start()
     {
         isCompleted = false;// load from save
-        MouseMovementTrack.OnStageCompleted += StageCompleteHandler;
-        StartTutorial();
-        int i = (int)currentStage;
-        OnQuestStart?.Invoke(stages[i].Name, stages[i].Text);
+        CameraQuest.OnQuestCompleted += OnQuestCompletedHandler;
+        MovementQuest.OnQuestCompleted += OnQuestCompletedHandler;
     }
-
-
-    void StageCompleteHandler(TutorialStage stage)
+    private void Update()
     {
-        MoveNextStage();
+        if(!tutorialStarted)
+        {
+            if (!isCompleted)
+            {
+                tutorialStarted = true;
+                int i = (int)currentStage;
+
+                StartTutorial();
+                //OnQuestShow?.Invoke(stages[i].Name, stages[i].Text);
+            }
+        }
     }
 
-    void Update()
+    void OnQuestCompletedHandler(TutorialStage stage)
     {
-
+        if (stage == currentStage)
+        {
+            Debug.Log($"Completed stage {stage}");
+            MoveNextStage();
+        }
     }
+
     void StartTutorial()
     {
         Debug.Log("Start tutorial");
@@ -50,17 +63,17 @@ public class QuestController : MonoBehaviour
     }
     void MoveNextStage()
     {
+        Debug.Log("Moving next stage");
         int i = (int)currentStage;
-        
         i++;
         currentStage = (TutorialStage)i;
         OpenStage(currentStage);
     }
     void OpenStage(TutorialStage stage)
     {
-        
+        OnQuestStart?.Invoke(currentStage);
         int i = (int)stage;
-        Debug.Log($"Opening stage {i}/{stage}");
-        OnQuestStart?.Invoke(stages[i].Name, stages[i].Text);
+        Debug.Log($"Starting stage {i}/{stage}");
+        OnQuestShow?.Invoke(stages[i].Name, stages[i].Text);
     }
 }
