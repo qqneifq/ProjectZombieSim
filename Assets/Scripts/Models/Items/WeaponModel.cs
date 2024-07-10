@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using UnityEngine;
 using static WeaponTypes;
 
@@ -49,6 +50,17 @@ public class WeaponModel
         {
             return damage; 
         } 
+    }
+    public int MaxAmmo
+    {
+        get 
+        { 
+            return maxAmmo;
+        }
+    }
+    public WeaponType Type
+    {
+        get { return weapon; }
     }
 
     public WeaponModel()

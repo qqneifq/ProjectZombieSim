@@ -38,6 +38,7 @@ public class WeaponController : MonoBehaviour
 
     public GameObject ShootingCam { get => shootingCam; set => shootingCam = value; }
 
+    public static event Action<int, int> OnAmmoChange;
     public static event Action<GameObject, float> OnHit;
     public static event Action<int> OnWeaponChange;
 
@@ -54,6 +55,14 @@ public class WeaponController : MonoBehaviour
         }
         currentWeapon = weapons[weaponNumber];
         OnWeaponChange?.Invoke(weaponNumber);
+        if(currentWeapon.IsRanged)
+        {
+            OnAmmoChange?.Invoke(currentWeapon.CurrentAmmo, currentWeapon.MaxAmmo);
+        }
+        else
+        {
+            OnAmmoChange?.Invoke(-1, -1);
+        }
         Debug.Log($"Current number {weaponNumber}");
     }
     void SetWeapon(WeaponModel w)
@@ -68,6 +77,8 @@ public class WeaponController : MonoBehaviour
         cam = shootingCam.GetComponent<Camera>();
         CameraSync.OnCameraSwitched += SwitchCamera;
         SetWeapon(weapons[weaponNumber]);
+        OnAmmoChange?.Invoke(currentWeapon.CurrentAmmo, currentWeapon.MaxAmmo);
+        OnWeaponChange?.Invoke((int)currentWeapon.Type);
     }
 
     // Update is called once per frame
@@ -146,6 +157,7 @@ public class WeaponController : MonoBehaviour
         // push bullet
         bullet.GetComponent<Rigidbody>().AddForce(shootDirection * currentWeapon.Velocity, ForceMode.Impulse);
         currentWeapon.ShootAmmo();
+        OnAmmoChange?.Invoke(currentWeapon.CurrentAmmo, currentWeapon.MaxAmmo);
         Debug.Log("Shoot bullet");
         // destroy after time
         StartCoroutine(DestroyBulletAfterTime(bullet, bulletLifeTime));
@@ -180,6 +192,7 @@ public class WeaponController : MonoBehaviour
         yield return new WaitForSeconds(currentWeapon.ReloadTime);
         currentWeapon.ReloadAmmo();
         isReloading = false;
+        OnAmmoChange?.Invoke(currentWeapon.CurrentAmmo, currentWeapon.MaxAmmo);
         Debug.Log("Reload Complete");
     }
 }
