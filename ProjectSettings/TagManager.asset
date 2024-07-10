@@ -9,6 +9,7 @@ TagManager:
   - Building
   - ItemHolder
   - Storage
+  - Foe
   layers:
   - Default
   - TransparentFX

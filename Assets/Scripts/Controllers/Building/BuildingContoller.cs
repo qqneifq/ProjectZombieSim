@@ -20,7 +20,7 @@ public class BuildingContoller : MonoBehaviour
     }
     public BuildingsConsts.BuildingIndificator GetIndificator()
     {
-        return _data.getBuildingIndificator();
+        return _data._buildingIndificator;
     }
     public Transform GetTransform()
     {
