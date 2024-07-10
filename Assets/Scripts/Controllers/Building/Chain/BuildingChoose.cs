@@ -14,7 +14,7 @@ public class BuildingChoose : IChainPart
 
     private BuildingsFactory _buildingsFactory;
 
-    private Building _building;
+    private BuildingContoller _building;
     private GameObject _buildingGO = null;
 
     private float _raycastField;
@@ -36,8 +36,11 @@ public class BuildingChoose : IChainPart
     {        
         if (_building == null)
         {
-            _building = _buildingsFactory.Get(0);
-            _buildingGO = GameObject.Instantiate(_building._gameBody);
+            Building building = _buildingsFactory.Get(0);
+            _buildingGO = GameObject.Instantiate(building._gameBody);
+            _building = _buildingGO.GetComponent<BuildingContoller>();
+            _building.SetData(building);
+
             _buildingGO.GetComponentInChildren<BoxCollider>().enabled = false;
         }
 
@@ -47,12 +50,12 @@ public class BuildingChoose : IChainPart
 
         Debug.DrawRay(_face.position + fwd * 1, fwd, Color.blue);
 
-        int _buildingIndificator = (int)_building._buildingIndificator;
+        int _buildingIndificator = (int)_building.GetIndificator();
 
         //Move
         if (Physics.Raycast(_face.position, fwd, out hit, _raycastField, _groundMask))
         {
-            _buildingGO.transform.position = new Vector3(hit.point.x - hit.point.x % _fieldDelta, hit.point.y + _building._size.y / 2, hit.point.z - hit.point.z % _fieldDelta);
+            _buildingGO.transform.position = new Vector3(hit.point.x - hit.point.x % _fieldDelta, hit.point.y + _building.GetSize().y / 2, hit.point.z - hit.point.z % _fieldDelta);
         }
 
         //Rotate
@@ -71,7 +74,7 @@ public class BuildingChoose : IChainPart
         {
             Debug.Log("NOT ZERO: " + _wheel);
         }
-
+        Building building1;
         if (_wheel < -1f)
         {
             _wheel = 0;
@@ -88,9 +91,9 @@ public class BuildingChoose : IChainPart
                 _buildingIndificator += 1;
             }
 
-            _building = _buildingsFactory.Get((BuildingIndificator)_buildingIndificator);
+            building1 = _buildingsFactory.Get((BuildingIndificator)_buildingIndificator);
 
-            while (_building == null)
+            while (building1 == null)
             {
                 if (_buildingIndificator + 1 >= Enum.GetValues(typeof(BuildingIndificator)).Length)
                 {
@@ -100,10 +103,12 @@ public class BuildingChoose : IChainPart
                 {
                     _buildingIndificator += 1;
                 }
-                _building = _buildingsFactory.Get((BuildingIndificator)_buildingIndificator);
+                building1 = _buildingsFactory.Get((BuildingIndificator)_buildingIndificator);
             }
 
-            _buildingGO = GameObject.Instantiate(_building._gameBody);
+            _buildingGO = GameObject.Instantiate(building1._gameBody);
+            _building = _buildingGO.GetComponent<BuildingContoller>();
+            _building.SetData(building1);
         }
         else if (_wheel > 1f)
         {
@@ -121,9 +126,9 @@ public class BuildingChoose : IChainPart
                 _buildingIndificator--;
             }
 
-            _building = _buildingsFactory.Get((BuildingIndificator)_buildingIndificator);
+            building1 = _buildingsFactory.Get((BuildingIndificator)_buildingIndificator);
 
-            while (_building == null)
+            while (building1 == null)
             {
                 if (_buildingIndificator - 1 < 0)
                 {
@@ -134,17 +139,20 @@ public class BuildingChoose : IChainPart
                     _buildingIndificator--;
                 }
 
-                _building = _buildingsFactory.Get((BuildingIndificator)_buildingIndificator);
+                building1 = _buildingsFactory.Get((BuildingIndificator)_buildingIndificator);
             }
-            _buildingGO = GameObject.Instantiate(_building._gameBody);
+
+            _buildingGO = GameObject.Instantiate(building1._gameBody);
+            _building = _buildingGO.GetComponent<BuildingContoller>();
+            _building.SetData(building1);
         }
 
         //Player want to build a building
-        if(Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             GameObject.Destroy(_buildingGO);
 
-            _handler.SetBuilding((int)_building._buildingIndificator);
+            _handler.SetBuilding((int)_building.GetIndificator());
             _handler.MoveToNext();
         }
 

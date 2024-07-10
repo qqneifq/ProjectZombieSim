@@ -24,10 +24,12 @@ public class BuildingsFactory : MonoBehaviour
 
             if (bc == null) {
                 buildings[index]._gameBody.AddComponent<BuildingContoller>();
-                bc = buildings[index]._gameBody.GetComponent<BuildingContoller>();
-
-                bc.SetData(new Building(buildingIndificator, new List<int>(), buildings[index]._gameBody, buildings[index]._name));
             }
+
+            bc = buildings[index]._gameBody.GetComponent<BuildingContoller>();
+
+            bc.SetData(buildings[index]);
+
             return buildings[index];
         }
         else

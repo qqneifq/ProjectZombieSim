@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Floor : MonoBehaviour
@@ -14,7 +15,9 @@ public class Floor : MonoBehaviour
     private FloorController _buildingMatrixController;
     private PathFindingController _pathFindingController;
     private DebugBuildingLayout _debugBuildingLayout;
-    private List<List<(int, int)>> _endPoints;
+
+    private Dictionary<(int x, int z), GameObject> _savedObjects;
+
     //OZ axis (local)
     private Vector3 _correctForwardVector;
     //OX axis (local)
@@ -24,11 +27,11 @@ public class Floor : MonoBehaviour
     private (int, int) _realMatrixSize;
     void Start()
     {
-        _endPoints = new List<List<(int, int)>>();
+        _savedObjects = new Dictionary<(int x, int z), GameObject>();
 
         _correctForwardVector = _pointStart.forward * _matrixDivisionUnit;
         _correctRightVector = _pointStart.right * _matrixDivisionUnit;
-
+        
         _realMatrixSize = ((int)(_size.x / _matrixDivisionUnit), (int)(_size.z / _matrixDivisionUnit));
 
         _buildingMatrixController = new FloorController(_realMatrixSize, _pointStart, _correctForwardVector, _correctRightVector, _matrixDivisionUnit);
@@ -39,14 +42,6 @@ public class Floor : MonoBehaviour
     public void Update()
     {
         _debugBuildingLayout.update();
-    }
-
-    public List<Vector3> GetWayToRandomEndPoint(Vector3 startPoint)
-    {
-        if (_endPoints.Count > 0)
-            return _pathFindingController.GetWay(_buildingMatrixController.getBuildingMatrix(), _buildingMatrixController.fromGlobalToMatrix(startPoint), _endPoints[Random.Range(0, _endPoints.Count)]);
-
-        return null;
     }
 
     //BuildingMatrixController methods
@@ -63,23 +58,49 @@ public class Floor : MonoBehaviour
         List<(int, int)> ans = _buildingMatrixController.TryToBuild(buildingContoller);
         buildingContoller.SetUsedPoints(ans);
 
+        savePointsWithObject(ans, buildingContoller.gameObject);
         return ans;
     }
     
-    public List<(int, int)> TryToBuild((Vector3, Quaternion)  buildingContoller, Vector3 size)
+    public List<(int, int)> TryToBuild((Vector3 position, Quaternion rotation, GameObject gameObject)  buildingContoller, Vector3 size)
     {
-        List<(int, int)> ans = _buildingMatrixController.TryToBuild(buildingContoller, size);
+        List<(int, int)> ans = _buildingMatrixController.TryToBuild((buildingContoller.position, buildingContoller.rotation), size);
 
+        savePointsWithObject(ans, buildingContoller.gameObject);
         return ans;
     }
 
     public void ReleaseBuildingPoints(List<(int, int)> points)
     {
         if (points == null) return;
-
+        deletePointsWithObject(points);
         _buildingMatrixController.ReleasePoints(points);
     }
-
+    public void ReleaseBuildingPoints(BuildingContoller buildingContoller)
+    {
+        if(buildingContoller == null || buildingContoller.getUsedPoints() == null) return;
+        deletePointsWithObject(buildingContoller.getUsedPoints());
+        _buildingMatrixController.ReleasePoints(buildingContoller.getUsedPoints());
+    }
+    public GameObject GetGameObjectByPoint(Vector3 point)
+    {
+        (int x, int z) analyze = ((int)((point.x - _pointStart.position.x) / _matrixDivisionUnit), (int)((point.z - _pointStart.position.z) / _matrixDivisionUnit));
+        GameObject ans;
+        if (_savedObjects.TryGetValue(analyze, out ans))
+        {
+            return ans;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    public bool IsPointUsed(Vector3 point)
+    {
+        (int x, int z) analyze = ((int)((point.x - _pointStart.position.x) / _matrixDivisionUnit), (int)((point.z - _pointStart.position.z) / _matrixDivisionUnit));
+        
+        return _savedObjects.ContainsKey(analyze);
+    }
     //DebugBuildingLayout methods
     public void CreateBuildingMap() {
         _debugBuildingLayout.CreateBuildingMap(_buildingMatrixController.getBuildingMatrix());
@@ -89,8 +110,25 @@ public class Floor : MonoBehaviour
     {
         _debugBuildingLayout.DestroyBuildingMap();
     }
-    public float getDelta()
+
+    public float GetDelta()
     {
         return _matrixDivisionUnit;
     }
+
+    private void savePointsWithObject(List<(int, int)> points, GameObject gameObject) {
+        foreach (var pair in points)
+        {
+            _savedObjects.Add(pair, gameObject);
+        }
+    }
+    private void deletePointsWithObject(List<(int, int)> points)
+    {
+        foreach (var pair in points)
+        {
+            _savedObjects.Remove(pair);
+        }
+    }
+
+    
 }
